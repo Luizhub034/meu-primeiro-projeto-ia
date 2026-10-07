@@ -127,48 +127,50 @@
   <footer>IdeiaLab AI · Seu próximo conteúdo começa aqui.</footer>
 
   <script>
-  async function gerar() {
-      const tema = document.getElementById("tema").value.trim();
-      const rede = document.getElementById("rede").value;
-      const tipo = document.getElementById("tipo").value;
-      const resultado = document.getElementById("resultado");
-      const copiarBtn = document.getElementById("copiar");
+ async function gerar() {
+  const tema = document.getElementById("tema").value.trim();
+  const rede = document.getElementById("rede").value;
+  const tipo = document.getElementById("tipo").value;
+  const resultado = document.getElementById("resultado");
+  const copiarBtn = document.getElementById("copiar");
 
-      if (!tema) {
-        alert("Digite um tema antes de continuar!");
-        return;
-      }
+  if (!tema) {
+    alert("Digite um tema antes de continuar!");
+    return;
+  }
 
-      let texto = "";
+  resultado.textContent = "✨ Gerando seu conteúdo...";
+  resultado.style.display = "block";
+  copiarBtn.style.display = "none";
 
-      if (tipo === "legenda") {
-        texto = `📌 ${tema}: comece com um pequeno passo hoje!\n\n`
-          + `Você não precisa fazer tudo de uma vez. Aprenda, pratique `
-          + `e descubra o que funciona para você.\n\n`
-          + `💬 O que você gostaria de aprender sobre ${tema}? `
-          + `Conte nos comentários!\n\n#${rede.replace("YouTube","CriacaoDeConteudo")} #Dicas #${tema.replace(/\s+/g,"")}`;
-      } else if (tipo === "video") {
-        texto = `🎬 ROTEIRO PARA ${rede.toUpperCase()}\n\n`
-          + `CENA 1 — ABERTURA:\n"Você quer saber mais sobre ${tema}?"\n\n`
-          + `CENA 2 — CONTEÚDO:\n`
-          + `"Aqui vai uma dica: pesquise, teste uma estratégia `
-          + `de cada vez e acompanhe seus resultados."\n\n`
-          + `CENA 3 — CHAMADA:\n`
-          + `"Salve este vídeo e acompanhe os próximos conteúdos!"`;
-      } else {
-        texto = `💡 5 IDEIAS DE CONTEÚDO SOBRE ${tema.toUpperCase()}\n\n`
-          + `1. 3 coisas que você precisa saber sobre ${tema}.\n`
-          + `2. Os erros mais comuns de quem está começando.\n`
-          + `3. Um passo a passo para iniciantes.\n`
-          + `4. Mitos e verdades sobre ${tema}.\n`
-          + `5. O que eu gostaria de saber antes de começar.\n\n`
-          + `Dica: adapte a ideia à sua experiência e ao seu público.`;
-      }
+  try {
+    const resposta = await fetch("https://ideialab-api.luizggustavo1.workers.dev", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        tema: tema,
+        rede: rede,
+        tipo: tipo
+      })
+    });
 
-      resultado.textContent = texto;
-      resultado.style.display = "block";
-      copiarBtn.style.display = "block";
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(dados.error || "Erro ao gerar conteúdo.");
     }
+
+    resultado.textContent = dados.texto;
+    copiarBtn.style.display = "block";
+
+  } catch (erro) {
+    console.error(erro);
+    resultado.textContent = "❌ Não foi possível gerar o conteúdo. Tente novamente.";
+    alert("Erro ao conectar com a API.");
+  }
+}
 
     function copiar() {
       const texto = document.getElementById("resultado").textContent;
