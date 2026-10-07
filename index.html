@@ -159,11 +159,13 @@
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        tema: tema,
-        rede: rede,
-        tipo: tipo
-      })
+     
+body: JSON.stringify({
+  tema: tema,
+  rede: rede,
+  tipo: tipo,
+  objetivo: objetivo
+})
     });
 
     const dados = await resposta.json();
