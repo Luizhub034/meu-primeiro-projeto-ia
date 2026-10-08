@@ -65,7 +65,11 @@
       cursor: pointer;
     }
     button:hover { background: #7c3aed; }
-    
+    #tituloResultado {
+  display: none;
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
 #resultado {
   display: none;
   margin-top: 24px;
@@ -132,7 +136,7 @@
   <option value="autoridade">🏆 Construir autoridade</option>
 </select>
       <button onclick="gerar()">✨ Gerar meu conteúdo</button>
-
+<h3 id="tituloResultado">✨ Seu conteúdo está pronto</h3>
       <div id="resultado"></div>
       <button id="copiar" onclick="copiar()" style="display:none">
         Copiar conteúdo
