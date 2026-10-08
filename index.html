@@ -71,7 +71,7 @@
   margin-top: 24px;
   margin-bottom: 10px;
 }
-    
+```css
 #resultado {
   display: none;
   margin-top: 24px;
@@ -187,7 +187,7 @@ body: JSON.stringify({
       throw new Error(dados.error || "Erro ao gerar conteúdo.");
     }
 
-    resultado.textContent = dados.texto;
+    resultado.textContent = dados.answer;
     document.getElementById("tituloResultado").style.display = "block";
     copiarBtn.style.display = "block";
 
