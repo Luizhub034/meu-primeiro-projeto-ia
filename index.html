@@ -156,6 +156,8 @@
   const objetivo = document.getElementById("objetivo").value;
   const resultado = document.getElementById("resultado");
   const copiarBtn = document.getElementById("copiar");
+   const gerarBtn = document.querySelector('button[onclick="gerar()"]');
+
 
   if (!tema) {
     alert("Digite um tema antes de continuar!");
@@ -165,6 +167,8 @@
   resultado.textContent = "✨ Gerando seu conteúdo...";
   resultado.style.display = "block";
   copiarBtn.style.display = "none";
+   gerarBtn.disabled = true;
+gerarBtn.textContent = "⏳ Gerando...";
 
   try {
     const resposta = await fetch("https://ideialab-api.luizggustavo1.workers.dev", {
@@ -192,11 +196,15 @@ body: JSON.stringify({
     copiarBtn.style.display = "block";
 
   } catch (erro) {
-    console.error(erro);
-    resultado.textContent = "❌ Não foi possível gerar o conteúdo. Tente novamente.";
-    alert("Erro ao conectar com a API.");
-  }
+console.error(erro);
+resultado.textContent = "❌ Não foi possível gerar o conteúdo. Tente novamente.";
+alert("Erro ao conectar com a API.");
+} finally {
+gerarBtn.disabled = false;
+gerarBtn.textContent = "✨ Gerar meu conteúdo";
 }
+}
+
 
     function copiar() {
       const texto = document.getElementById("resultado").textContent;
