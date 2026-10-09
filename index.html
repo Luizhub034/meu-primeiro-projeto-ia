@@ -191,7 +191,7 @@ body: JSON.stringify({
       throw new Error(dados.error || "Erro ao gerar conteúdo.");
     }
 
-    resultado.textContent = dados.answer;
+    resultado.textContent = dados.texto;
     document.getElementById("tituloResultado").style.display = "block";
     copiarBtn.style.display = "block";
 
