@@ -82,8 +82,20 @@ body {
   line-height: 1;
 }
 
+
 .brand-name span {
-  color: #b9a5ff;
+  background: linear-gradient(
+    110deg,
+    #c4b5fd 0%,
+    #a78bfa 45%,
+    #8b5cf6 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.22));
+  font-weight: 850;
 }
 
 .brand-badge {
