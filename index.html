@@ -186,6 +186,37 @@ h1 span {
     margin-top: 38px;
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
   }
+  .panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.panel-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #8b5cf6, #5141a5);
+  color: #fff;
+  font-size: 25px;
+  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.22);
+}
+
+.panel-heading h2 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+
+.panel-heading p {
+  margin: 5px 0 0;
+  color: #a1a6bc;
+  font-size: 13px;
+}
 
   label {
     display: block;
@@ -353,8 +384,13 @@ h1 span {
 </p>
 
     <section class="panel">
-      <h2>✨ Gerador de conteúdo</h2>
-
+      <div class="panel-heading">
+  <div class="panel-icon">✦</div>
+  <div>
+    <h2>Seu estúdio criativo</h2>
+    <p>Configure. Gere. Publique.</p>
+  </div>
+</div>
       <label for="tema">Qual é o tema do seu conteúdo?</label>
       <input id="tema" placeholder="Ex.: ganhar dinheiro pela internet">
 
