@@ -426,26 +426,33 @@ button:active {
 }
 
 
+
 #copiar {
   margin-top: 12px;
-  background: linear-gradient(135deg, #1b1e30, #25213b);
-  color: #e9e3ff;
-  border: 1px solid rgba(155, 122, 255, 0.32);
+  background: linear-gradient(135deg, #211a38, #30234b);
+  color: #eee7ff;
+  border: 1px solid rgba(167, 139, 250, 0.4);
   border-radius: 12px;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
   font-weight: 650;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 #copiar:hover {
-  background: linear-gradient(135deg, #28213f, #33264f);
-  border-color: #9b7aff;
-  box-shadow: 0 6px 22px rgba(139, 92, 246, 0.16);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #30204f, #432b68);
+  border-color: #b8a0ff;
+  box-shadow:
+    0 8px 24px rgba(139, 92, 246, 0.22),
+    0 0 16px rgba(167, 139, 250, 0.1);
+  transform: translateY(-2px);
 }
 
 #copiar:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.99);
 }
 
   footer {
