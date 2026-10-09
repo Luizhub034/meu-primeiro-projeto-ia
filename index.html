@@ -374,14 +374,17 @@ button {
   transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
 }
 
+
 button:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 12px 34px rgba(139, 92, 246, 0.35);
+  filter: brightness(1.12);
+  box-shadow:
+    0 12px 34px rgba(139, 92, 246, 0.4),
+    0 0 22px rgba(167, 139, 250, 0.12);
   transform: translateY(-2px);
 }
 
 button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.99);
   filter: brightness(0.98);
 }
   button:disabled {
