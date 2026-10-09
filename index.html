@@ -627,7 +627,7 @@ button:active {
   resultado.style.display = "block";
   copiarBtn.style.display = "none";
    gerarBtn.disabled = true;
-gerarBtn.textContent = "⏳ Gerando...";
+gerarBtn.innerHTML = '<span class="idealab-loading-icon">✨</span> Gerando...';
 
   try {
     const resposta = await fetch("https://ideialab-api.luizggustavo1.workers.dev", {
