@@ -237,14 +237,35 @@ h1 span {
     font-size: 15px;
   }
 
-  input,
-  select {
-    color: var(--text);
-    background: #0b0d16;
-    border: 1px solid #303348;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
+ input,
+select {
+  width: 100%;
+  min-height: 54px;
+  padding: 15px 17px;
+  color: #f5f5ff;
+  background: #0c0e18;
+  border: 1px solid #303348;
+  border-radius: 13px;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+input:hover,
+select:hover {
+  border-color: #49415f;
+}
+
+input:focus,
+select:focus {
+  background: #10121f;
+  border-color: #9b7aff;
+  box-shadow: 0 0 0 3px rgba(155, 122, 255, 0.14);
+}
+
+input::placeholder {
+  color: #747b92;
+}
 
   input::placeholder {
     color: #72788f;
