@@ -5,97 +5,242 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IdeiaLab AI | Seu conteúdo começa aqui</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1020;
-      color: #f5f7ff;
-    }
+ ```html
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  :root {
+    color-scheme: dark;
+    --bg: #08090f;
+    --surface: #10121c;
+    --surface-light: #151827;
+    --border: #272a3b;
+    --text: #f5f5ff;
+    --muted: #a1a6bc;
+    --purple: #9b7aff;
+    --purple-light: #b9a5ff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Arial, sans-serif;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(124, 58, 237, 0.13), transparent 48%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    padding: 23px 7%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(8, 9, 15, 0.82);
+    font-weight: 800;
+    font-size: 23px;
+    letter-spacing: -0.8px;
+  }
+
+  header span {
+    color: var(--purple-light);
+  }
+
+  main {
+    width: min(100% - 40px, 780px);
+    margin: 76px auto 90px;
+  }
+
+  .tag {
+    display: inline-block;
+    color: var(--purple-light);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    padding: 9px 13px;
+    border: 1px solid rgba(155, 122, 255, 0.25);
+    border-radius: 999px;
+    background: rgba(155, 122, 255, 0.08);
+  }
+
+  h1 {
+    max-width: 720px;
+    font-size: clamp(38px, 7vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -2.5px;
+    margin: 24px 0 18px;
+    font-weight: 800;
+  }
+
+  h1 span {
+    color: var(--purple-light);
+  }
+
+  .intro {
+    max-width: 600px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .panel {
+    position: relative;
+    background: linear-gradient(145deg, #141624, #0e1019);
+    border: 1px solid var(--border);
+    padding: clamp(22px, 5vw, 34px);
+    border-radius: 22px;
+    margin-top: 38px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  }
+
+  label {
+    display: block;
+    margin: 21px 0 9px;
+    color: #e8e8f4;
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  input,
+  select,
+  button {
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 15px;
+  }
+
+  input,
+  select {
+    color: var(--text);
+    background: #0b0d16;
+    border: 1px solid #303348;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input::placeholder {
+    color: #72788f;
+  }
+
+  input:focus,
+  select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(155, 122, 255, 0.13);
+  }
+
+  button {
+    margin-top: 25px;
+    background: linear-gradient(110deg, #8b5cf6, #a78bfa);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 8px 26px rgba(139, 92, 246, 0.2);
+    transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+  }
+
+  button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 10px 32px rgba(139, 92, 246, 0.3);
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+  }
+
+  #tituloResultado {
+    display: none;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+
+  #resultado {
+    display: none;
+    margin-top: 16px;
+    padding: clamp(20px, 4vw, 30px);
+    background: #10121c;
+    color: #e9eaf5;
+    border: 1px solid #2b2e42;
+    border-radius: 18px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 15px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  }
+
+  #copiar {
+    background: #1a1d2c;
+    border: 1px solid #363a52;
+    box-shadow: none;
+  }
+
+  #copiar:hover {
+    background: #24283b;
+    border-color: #6550a7;
+  }
+
+  footer {
+    text-align: center;
+    color: #777e96;
+    padding: 30px 20px;
+    font-size: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  @media (max-width: 600px) {
     header {
-      padding: 24px 8%;
-      border-bottom: 1px solid #252c40;
-      font-weight: bold;
-      font-size: 22px;
+      padding: 20px;
+      font-size: 21px;
     }
-    header span { color: #a78bfa; }
+
     main {
-      max-width: 760px;
-      margin: 60px auto;
-      padding: 0 22px;
+      width: calc(100% - 32px);
+      margin: 48px auto 60px;
     }
-    .tag {
-      color: #c4b5fd;
-      font-size: 13px;
-      letter-spacing: 2px;
+
+    h1 {
+      font-size: clamp(36px, 10vw, 48px);
+      letter-spacing: -1.7px;
     }
-    h1 { font-size: clamp(34px, 7vw, 54px); margin-bottom: 12px; }
-    h1 span { color: #a78bfa; }
-    .intro { color: #b8c0d8; line-height: 1.7; }
+
+    .intro {
+      font-size: 15px;
+    }
+
     .panel {
-      background: #151c30;
-      border: 1px solid #303953;
-      padding: 25px;
+      margin-top: 28px;
       border-radius: 18px;
-      margin-top: 30px;
     }
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: bold;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+
+    input,
+    select,
+    button {
       font-size: 16px;
     }
-    input, select {
-      color: white;
-      background: #0b1020;
-      border: 1px solid #3a4562;
-    }
-    button {
-      margin-top: 22px;
-      background: #8b5cf6;
-      color: white;
-      border: 0;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover { background: #7c3aed; }
-    
-    #tituloResultado {
-  display: none;
-  margin-top: 24px;
-  margin-bottom: 10px;
-}
-```css
-#resultado {
-  display: none;
-  margin-top: 24px;
-  padding: 24px;
-  background: #0b1020;
-  color: #f1f5f9;
-  border: 1px solid #26334d;
-  border-radius: 16px;
-  line-height: 1.8;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font-size: 15px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
-}
+  }
+</style>
 ```
 
-    #copiar { background: #29334d; }
-    footer {
-      text-align: center;
-      color: #9ba6c2;
-      padding: 30px 15px;
-      font-size: 13px;
-    }
-  </style>
 </head>
 <body>
   <header>IdeiaLab <span>AI ✦</span></header>
