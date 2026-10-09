@@ -342,18 +342,21 @@ select {
 }
 
 
+
 input:hover,
 select:hover {
-  border-color: #7961b5;
-  background: #10121f;
-}
-input:focus,
-select:focus {
-  background: #10121f;
-  border-color: #9b7aff;
-  box-shadow: 0 0 0 3px rgba(155, 122, 255, 0.14);
+  border-color: rgba(167, 139, 250, 0.75);
+  background: #121426;
 }
 
+input:focus,
+select:focus {
+  background: #121426;
+  border-color: #a78bfa;
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.14),
+    0 0 18px rgba(139, 92, 246, 0.08);
+}
 input::placeholder {
   color: #747b92;
 }
