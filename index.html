@@ -627,146 +627,231 @@
     IdeiaLab AI · Seu próximo conteúdo começa aqui.
   </footer>
 
-  <script>
-    const API_URL =
-      "https://ideialab-api.luizggustavo1.workers.dev";
+  
+<script>
+  const API_URL =
+    "https://ideialab-api.luizggustavo1.workers.dev";
 
-    const form = document.getElementById("formGeracao");
-    const temaInput = document.getElementById("tema");
-    const redeSelect = document.getElementById("rede");
-    const tipoSelect = document.getElementById("tipo");
-    const objetivoSelect = document.getElementById("objetivo");
-    const gerarBtn = document.getElementById("gerarBtn");
-    const resultado = document.getElementById("resultado");
-    const tituloResultado = document.getElementById("tituloResultado");
-    const copiarBtn = document.getElementById("copiar");
+  const form = document.getElementById("formGeracao");
+  const temaInput = document.getElementById("tema");
+  const redeSelect = document.getElementById("rede");
+  const tipoSelect = document.getElementById("tipo");
+  const objetivoSelect = document.getElementById("objetivo");
+  const gerarBtn = document.getElementById("gerarBtn");
+  const resultado = document.getElementById("resultado");
+  const tituloResultado = document.getElementById("tituloResultado");
+  const copiarBtn = document.getElementById("copiar");
 
-    let ultimoConteudo = "";
+  let ultimoConteudo = "";
 
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      await gerar();
-    });
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    await gerar();
+  });
 
-    copiarBtn.addEventListener("click", copiar);
+  copiarBtn.addEventListener("click", copiar);
 
-    async function gerar() {
-      const tema = temaInput.value.trim();
+  async function gerar() {
+    const tema = temaInput.value.trim();
 
-      if (!tema) {
-        alert("Digite um tema antes de continuar!");
-        temaInput.focus();
-        return;
-      }
-
-      resultado.textContent = "✨ Gerando seu conteúdo...";
-      resultado.style.display = "block";
-      tituloResultado.style.display = "none";
-      copiarBtn.style.display = "none";
-
-      ultimoConteudo = "";
-      gerarBtn.disabled = true;
-      gerarBtn.innerHTML =
-        '<span class="idealab-loading-icon">✨</span> Gerando...';
-
-      try {
-        const resposta = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            tema: tema,
-            rede: redeSelect.value,
-            tipo: tipoSelect.value,
-            objetivo: objetivoSelect.value
-          })
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-          throw new Error(
-            dados.details ||
-            dados.error ||
-            "Erro ao gerar conteúdo. Tente novamente."
-          );
-        }
-
-        if (
-          typeof dados.texto !== "string" ||
-          !dados.texto.trim()
-        ) {
-          throw new Error(
-            "A API não retornou um conteúdo válido."
-          );
-        }
-
-        ultimoConteudo = dados.texto;
-        resultado.textContent = ultimoConteudo;
-
-        tituloResultado.style.display = "block";
-        copiarBtn.style.display = "block";
-
-      } catch (erro) {
-        console.error("Erro ao gerar conteúdo:", erro);
-
-        resultado.textContent =
-          "❌ Não foi possível gerar o conteúdo. " +
-          (erro.message || "Verifique a conexão e tente novamente.");
-
-        tituloResultado.style.display = "none";
-        copiarBtn.style.display = "none";
-
-      } finally {
-        gerarBtn.disabled = false;
-        gerarBtn.textContent = "✨ Gerar meu conteúdo";
-      }
+    if (!tema) {
+      alert("Digite um tema antes de continuar!");
+      temaInput.focus();
+      return;
     }
 
-    async function copiar() {
-      if (!ultimoConteudo) {
-        alert("Não há conteúdo para copiar.");
-        return;
+    ultimoConteudo = "";
+    resultado.textContent = "✨ Conectando à inteligência artificial...";
+    resultado.style.display = "block";
+    tituloResultado.style.display = "none";
+    copiarBtn.style.display = "none";
+
+    gerarBtn.disabled = true;
+    gerarBtn.innerHTML =
+      '<span class="idealab-loading-icon">✨</span> Gerando...';
+
+    try {
+      const resposta = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          tema: tema,
+          rede: redeSelect.value,
+          tipo: tipoSelect.value,
+          objetivo: objetivoSelect.value
+        })
+      });
+
+      if (!resposta.ok) {
+        let mensagem = "Não foi possível gerar o conteúdo.";
+
+        try {
+          const dadosErro = await resposta.json();
+          mensagem =
+            dadosErro.details?.error?.message ||
+            dadosErro.error ||
+            mensagem;
+        } catch {
+          // Mantém a mensagem padrão se o erro não vier em JSON.
+        }
+
+        throw new Error(mensagem);
       }
 
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(ultimoConteudo);
-        } else {
-          const areaTexto = document.createElement("textarea");
-          areaTexto.value = ultimoConteudo;
-          areaTexto.setAttribute("readonly", "");
-          areaTexto.style.position = "fixed";
-          areaTexto.style.opacity = "0";
+      if (!resposta.body) {
+        throw new Error("Seu navegador não recebeu o fluxo de conteúdo.");
+      }
 
-          document.body.appendChild(areaTexto);
-          areaTexto.select();
+      const leitor = resposta.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let recebeuTexto = false;
+      let terminou = false;
 
-          const copiado = document.execCommand("copy");
-          areaTexto.remove();
+      function processarEvento(evento) {
+        const linhas = evento.split("\n");
 
-          if (!copiado) {
-            throw new Error("Não foi possível copiar.");
+        for (const linha of linhas) {
+          if (!linha.startsWith("data:")) continue;
+
+          const textoEvento = linha.slice(5).trim();
+          if (!textoEvento) continue;
+
+          let pacote;
+
+          try {
+            pacote = JSON.parse(textoEvento);
+          } catch {
+            continue;
+          }
+
+          if (pacote.erro) {
+            throw new Error(pacote.erro);
+          }
+
+          if (pacote.fim) {
+            terminou = true;
+          }
+
+          if (typeof pacote.texto === "string" && pacote.texto.length > 0) {
+            if (!recebeuTexto) {
+              resultado.textContent = "";
+              recebeuTexto = true;
+              tituloResultado.style.display = "block";
+              tituloResultado.textContent = "✨ Criando seu conteúdo...";
+            }
+
+            ultimoConteudo += pacote.texto;
+            resultado.textContent += pacote.texto;
           }
         }
+      }
 
-        copiarBtn.textContent = "✓ Conteúdo copiado!";
-        alert("Conteúdo copiado com sucesso!");
+      while (true) {
+        const { value, done } = await leitor.read();
 
-        setTimeout(() => {
-          copiarBtn.textContent = "Copiar conteúdo";
-        }, 2000);
+        if (done) break;
 
-      } catch (erro) {
-        console.error("Erro ao copiar:", erro);
+        buffer += decoder.decode(value, { stream: true });
+        buffer = buffer.replace(/\r\n/g, "\n");
 
-        alert(
-          "Não foi possível copiar automaticamente. " +
-          "Selecione o texto do resultado e copie manualmente."
+        let separador;
+
+        while ((separador = buffer.indexOf("\n\n")) !== -1) {
+          const evento = buffer.slice(0, separador);
+          buffer = buffer.slice(separador + 2);
+          processarEvento(evento);
+        }
+      }
+
+      buffer += decoder.decode();
+
+      if (buffer.trim()) {
+        processarEvento(buffer);
+      }
+
+      if (!recebeuTexto || !ultimoConteudo.trim()) {
+        throw new Error("A inteligência artificial não retornou conteúdo.");
+      }
+
+      if (!terminou) {
+        throw new Error(
+          "A conexão foi interrompida antes do fim. Gere o conteúdo novamente."
         );
       }
+
+      tituloResultado.textContent = "✨ Seu conteúdo está pronto";
+      tituloResultado.style.display = "block";
+      copiarBtn.style.display = "block";
+
+    } catch (erro) {
+      console.error("Erro ao gerar conteúdo:", erro);
+
+      if (ultimoConteudo.trim()) {
+        resultado.textContent =
+          ultimoConteudo +
+          "\n\n⚠️ A geração foi interrompida. O texto acima pode estar incompleto.";
+      } else {
+        resultado.textContent =
+          "❌ Não foi possível gerar o conteúdo.\n\n" +
+          (erro.message || "Tente novamente em alguns instantes.");
+      }
+
+      tituloResultado.style.display = "none";
+      copiarBtn.style.display = ultimoConteudo.trim() ? "block" : "none";
+
+    } finally {
+      gerarBtn.disabled = false;
+      gerarBtn.textContent = "✨ Gerar meu conteúdo";
     }
-  </script>
+  }
+
+  async function copiar() {
+    if (!ultimoConteudo.trim()) {
+      alert("Não há conteúdo para copiar.");
+      return;
+    }
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(ultimoConteudo);
+      } else {
+        const areaTexto = document.createElement("textarea");
+        areaTexto.value = ultimoConteudo;
+        areaTexto.setAttribute("readonly", "");
+        areaTexto.style.position = "fixed";
+        areaTexto.style.opacity = "0";
+
+        document.body.appendChild(areaTexto);
+        areaTexto.select();
+
+        const copiado = document.execCommand("copy");
+        areaTexto.remove();
+
+        if (!copiado) {
+          throw new Error("Não foi possível copiar.");
+        }
+      }
+
+      copiarBtn.textContent = "✓ Conteúdo copiado!";
+      alert("Conteúdo copiado com sucesso!");
+
+      setTimeout(() => {
+        copiarBtn.textContent = "Copiar conteúdo";
+      }, 2000);
+
+    } catch (erro) {
+      console.error("Erro ao copiar:", erro);
+
+      alert(
+        "Não foi possível copiar automaticamente. " +
+        "Selecione o texto do resultado e copie manualmente."
+      );
+    }
+  }
+</script>
+
 </body>
 </html>
